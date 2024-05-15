@@ -106,7 +106,7 @@ export const BuyTickets = ({
               <br />
               Start: {new Date(stage.date_start).toLocaleString()}
               <br />
-              Harga: Rp {stage.ticket_price}
+              Harga: ¥ {stage.ticket_price}
               <br />
               Stock: {stage.ticket_stock}
             </CardDescription>

@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -12,6 +11,7 @@ import { Stage } from ".";
 import { useState } from "react";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useToast } from "@/components/ui/use-toast";
+import { ChevronRightIcon } from "@radix-ui/react-icons";
 
 export const BuyDialog = ({
   stage,
@@ -52,14 +52,14 @@ export const BuyDialog = ({
         }
 
         toast({
-          title: "Tiket berhasil dibeli",
-          description: `Berhasil membeli ${ticketQuantity} tiket untuk ${stage.stage_name}`,
+          title: "Ticket bought successfully!",
+          description: `Successfully bought ${ticketQuantity} ticket(s) for ${stage.stage_name}`,
           variant: "default",
         });
       })
       .catch((error) => {
         toast({
-          title: "Gagal membeli tiket",
+          title: "Failed to buy ticket!",
           description: error.message,
           variant: "destructive",
         });
@@ -69,16 +69,18 @@ export const BuyDialog = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button disabled={stage.ticket_stock === 0}>Beli</Button>
+        <Button disabled={stage.ticket_stock === 0} className="">
+          Click here to purchase
+          <ChevronRightIcon className="w-6 h-6" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Beli Tiket {stage.stage_name}</DialogTitle>
-          <DialogDescription>description</DialogDescription>
+          <DialogTitle>Buy {stage.stage_name} Ticket</DialogTitle>
         </DialogHeader>
         <p>min: 1, max: {stage.ticket_stock}</p>
         <Input
-          placeholder="Jumlah Tiket"
+          placeholder="How many tickets?"
           type="number"
           min={1}
           max={stage.ticket_stock}
@@ -97,7 +99,7 @@ export const BuyDialog = ({
         />
         <p>total: ¥{parseInt(ticketQuantity) * stage.ticket_price}</p>
         <DialogClose asChild>
-          <Button onClick={buyTickets}>Beli</Button>
+          <Button onClick={buyTickets}>Buy</Button>
         </DialogClose>
       </DialogContent>
     </Dialog>

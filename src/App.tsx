@@ -24,6 +24,14 @@ function App() {
 
   return (
     <>
+      <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-[100lvh] pointer-events-none bg-no-repeat bg-center bg-[url('./main_bg.webp')] -z-10">
+        <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-[100lvh]">
+          <video autoPlay muted loop className="w-full h-full object-cover">
+            <source src="./bg_mov.webm" type="video/webm" />
+          </video>
+        </div>
+        <div className="fixed bottom-0 left-0 w-full min-w-[600px] h-[100lvh] bg-no-repeat bg-[center_bottom] bg-[url('./bg_island.webp')] bg-contain" />
+      </div>
       {username ? (
         <BuyTickets username={username} handleLogout={handleLogout} />
       ) : (

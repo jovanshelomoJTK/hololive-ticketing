@@ -56,7 +56,7 @@ export const BuyTickets = ({
       })
       .catch((error) => {
         toast({
-          title: "Gagal mendapatkan data stage",
+          title: "Failed to get stage data!",
           description: error.message,
           variant: "destructive",
         });
@@ -78,7 +78,7 @@ export const BuyTickets = ({
       })
       .catch((error) => {
         toast({
-          title: "Gagal mendapatkan data tiket",
+          title: "Failed to get ticket data!",
           description: error.message,
           variant: "destructive",
         });
@@ -90,57 +90,89 @@ export const BuyTickets = ({
   }, [refreshData]);
 
   return (
-    <>
-      <p>Kamu terlogin sebagai {username}</p>
-      <Button onClick={handleLogout}>Logout</Button>
-      {stages.map((stage) => (
-        <Card key={stage.stage_id}>
-          <CardHeader>
-            <CardTitle>{stage.stage_name}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CardDescription>
-              Day: {stage.stage_day}
-              <br />
-              Open: {new Date(stage.date_open).toLocaleString()}
-              <br />
-              Start: {new Date(stage.date_start).toLocaleString()}
-              <br />
-              Harga: ¥ {stage.ticket_price}
-              <br />
-              Stock: {stage.ticket_stock}
-            </CardDescription>
-          </CardContent>
-          <CardFooter>
-            <BuyDialog
-              stage={stage}
-              username={username}
-              refreshData={refreshData}
-            />
-          </CardFooter>
-        </Card>
-      ))}
-
-      <p>Tiket Saya</p>
-      {!myTickets.length ? (
-        <p>No tickets bought yet</p>
-      ) : (
-        myTickets.map((ticket) => (
-          <Card key={ticket.ticket_id}>
-            <CardHeader>
-              <CardTitle>{ticket.timestamp}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>
-                {
-                  stages.find((stage) => stage.stage_id === ticket.stage_id)
-                    ?.stage_name
-                }
-              </CardDescription>
-            </CardContent>
-          </Card>
-        ))
-      )}
-    </>
+    <div className="w-full flex flex-col p-4 gap-4 max-w-[1700px] mx-auto">
+      <Card className="overflow-clip border-secondary border-2 w-full">
+        <CardHeader className="bg-secondary text-secondary-foreground">
+          <CardTitle className="text-4xl font-extrabold">
+            Your Account
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-8 space-y-4">
+          <p>
+            You are logged in as <strong>{username}</strong>
+          </p>
+          <Button onClick={handleLogout} variant="secondary">
+            Logout
+          </Button>
+        </CardContent>
+      </Card>
+      <Card className="overflow-clip border-primary border-2 w-full">
+        <CardHeader className="bg-primary text-primary-foreground">
+          <CardTitle className="text-4xl font-extrabold">
+            hololive 5th fes. Capture the Moment Supported By Bushiroad
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-8 space-y-4">
+          {stages.map((stage) => (
+            <Card key={stage.stage_id}>
+              <CardHeader>
+                <CardTitle>{stage.stage_name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Day: {stage.stage_day}
+                  <br />
+                  Open: {new Date(stage.date_open).toLocaleString()}
+                  <br />
+                  Start: {new Date(stage.date_start).toLocaleString()}
+                  <br />
+                  Price: ¥{stage.ticket_price}
+                  <br />
+                  Stock: {stage.ticket_stock}
+                </CardDescription>
+              </CardContent>
+              <CardFooter>
+                <BuyDialog
+                  stage={stage}
+                  username={username}
+                  refreshData={refreshData}
+                />
+              </CardFooter>
+            </Card>
+          ))}
+        </CardContent>
+      </Card>
+      <Card className="overflow-clip border-secondary border-2 w-full">
+        <CardHeader className="bg-secondary text-secondary-foreground">
+          <CardTitle className="text-4xl font-extrabold">
+            Bought Tickets
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-8 space-y-4">
+          {!myTickets.length ? (
+            <p>No tickets bought yet</p>
+          ) : (
+            myTickets.map((ticket) => (
+              <Card key={ticket.ticket_id}>
+                <CardHeader>
+                  <CardTitle>
+                    {
+                      stages.find((stage) => stage.stage_id === ticket.stage_id)
+                        ?.stage_name
+                    }
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    <p>{ticket.ticket_id}</p>
+                    <p>{new Date(ticket.timestamp).toLocaleString()}</p>
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 };

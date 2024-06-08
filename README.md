@@ -27,6 +27,62 @@ Berikut adalah pembagian tugas dan tanggung jawab masing-masing anggota tim dala
 | 2   | Muhammad Rafi Farhan  | - Dokumentasi Laporan <br> - Programmer                                                                                                                       |
 | 3   | Rachmat Purwa Saputra | - Ketua <br> - Dokumentasi Laporan <br> - Programmer                                                                                                          |
 | 4   | Reihan Hadi Fauzan    | - Dokumentasi Laporan <br> - Programmer                                                                                                                       |
+
+## Analisis Alasan Pemilihan Tema dan Solusi
+
+Aplikasi ini dipilih sebagai solusi untuk mengatasi tantangan dalam mengelola penjualan tiket konser VTuber karena kebutuhan akan sistem yang dapat mengelola lalu lintas pengguna yang tinggi, ketersediaan tiket secara real-time, dan mencegah kesalahan dalam pembelian tiket. Solusi ini juga memungkinkan penggemar untuk mengakses acara-acara tersebut dengan lebih mudah.
+
+## Arsitektur Sistem dan Jaringan
+
+### 1.Arsitektur Sistem:
+
+Kami merancang aplikasi ini dengan sistem terdistribusi yang mengadopsi arsitektur berbasis client-server.
+
+**Client Side:**
+- **Komponen:** Web Browser / HTTP Client.
+- **Proses:**
+  - **Permintaan HTTP:** Klien mengirimkan permintaan HTTP ke server, bisa berupa GET untuk mendapatkan data (seperti daftar stage atau tiket) atau POST untuk membeli tiket.
+  - **Pengolahan Respons:** Klien menerima respons HTTP dari server dalam format JSON untuk diolah atau ditampilkan.
+
+**Server Side:**
+- **Komponen:** ThreadingHTTPServer, Handler, Handlers Functions.
+- **Proses:**
+  - **Penerimaan Permintaan:** Server menerima permintaan dari klien dan menggunakan Handler untuk menentukan tindakan yang tepat.
+  - **Pengolahan Data:** Berdasarkan jenis permintaan, server membaca atau menulis ke database menggunakan semaphore untuk menjaga integritas data.
+  - **Pengiriman Respons:** Setelah permintaan diproses, server mengirimkan respons dalam format JSON kembali ke klien.
+
+### 2. Arsitektur Jaringan:
+
+**Client Network:**
+- **Komponen:** Jaringan yang digunakan oleh klien untuk mengirim permintaan HTTP ke server, bisa LAN atau internet.
+- **Komunikasi:** Klien mengirimkan permintaan melalui protokol HTTP ke alamat IP dan port server.
+
+**Server Network:**
+- **Komponen:** Jaringan tempat server berada, bisa lokal atau terhubung ke internet.
+- **Komunikasi:** Server mendengarkan permintaan pada alamat IP tertentu dan port tertentu.
+
+### 3. Alur Proses Aplikasi
+
+**Permintaan Untuk Mendaftar Stage (GET /stages):**
+- Klien mengirimkan permintaan GET untuk mendapatkan daftar stage.
+- Server memproses permintaan dan mengirim respons berisi daftar stage kembali ke klien.
+
+**Permintaan Untuk Mendapatkan Tiket (GET /my-tickets):**
+- Klien mengirimkan permintaan GET untuk mendapatkan daftar tiket milik pengguna tertentu.
+- Server memproses permintaan dan mengirim respons berisi daftar tiket kembali ke klien.
+
+**Klien Mengirim Permintaan Untuk Membeli Tiket (POST /buy-tickets):**
+- Klien mengirimkan permintaan POST untuk membeli tiket dengan data JSON.
+- Server memproses permintaan dan mengirim respons berisi informasi tiket yang berhasil dibeli kembali ke klien.
+
+### 4. Penanganan Kesalahan
+
+**Permintaan dengan Parameter Tidak Lengkap atau Tidak Valid:**
+- Jika permintaan tidak menyertakan parameter yang diperlukan atau parameter tidak valid, server mengirimkan respons kesalahan yang sesuai ke klien.
+
+**Kesalahan Akses Berkas:**
+- Jika terjadi kesalahan saat membaca atau menulis berkas, server mengirimkan respons kesalahan internal server ke klien.
+
 ## Prerequisite
 
 - Node.js 20
@@ -34,7 +90,19 @@ Berikut adalah pembagian tugas dan tanggung jawab masing-masing anggota tim dala
 
 ## How to run
 
-```
-npm install
-npm run dev
-```
+1. Clone repository ini ke dalam perangkat lokal Anda dengan menjalankan perintah berikut pada terminal atau command prompt:
+    ```bash
+    git clone https://github.com/jovanshelomoJTK/hololive-ticketing.git
+    ```
+
+2. Setelah proses cloning selesai, buka folder proyek ini pada Visual Studio Code.
+   
+3. Jalankan perintah berikut pada terminal atau command prompt untuk menginstall dependencies yang diperlukan:
+    ```bash
+    npm install
+    ```
+    
+4. Tunggu hingga proses instalasi dependencies selesai dan sukses. Setelah itu, proyek siap untuk dijalankan dengan perintah berikut:
+    ```bash
+    npm run dev
+    ```

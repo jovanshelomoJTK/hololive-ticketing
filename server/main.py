@@ -13,33 +13,33 @@ class Handler(BaseHTTPRequestHandler):
     semaphoreTickets = Semaphore(1)
 
     # to allow cors
-    def allow_cors(self):
+    def allow_cors(self): # berfungsi untuk mengizinkan CORS (Cross-Origin Resource Sharing) agar server bisa diakses oleh domain lain
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
 
-    def create_response(self, status: int, content: str):
+    def create_response(self, status: int, content: str): # def create_response berfungsi untuk membuat response dari server, dengan status code dan content yang diberikan
         self.send_response(status)
         self.allow_cors()
         self.send_header('Content-type', 'application/json')
         self.end_headers()
-        self.wfile.write(content.encode('utf8'))
+        self.wfile.write(content.encode('utf8')) 
 
-    def create_response_error(self, error_obj: constants.responseErrorType):
+    def create_response_error(self, error_obj: constants.responseErrorType): # def create_response_error berfungsi untuk membuat response error dari server, dengan error_obj yang diberikan
         self.send_response(error_obj['status'])
         self.allow_cors()
         self.send_header('Content-type', 'application/json')
         self.end_headers()
-        self.wfile.write(json.dumps(error_obj['content']).encode('utf8'))
+        self.wfile.write(json.dumps(error_obj['content']).encode('utf8')) # response yang berupa json di encode ke utf8 agar bisa dibaca oleh client yang meminta response
 
     # OPTIONS request
-    def do_OPTIONS(self):
+    def do_OPTIONS(self): 
         self.send_response(200)
         self.allow_cors()
         self.end_headers()
 
     # GET request
-    def do_GET(self):
+    def do_GET(self): # def do_GET berfungsi untuk menangani request GET dari client
         parsed_url = urlparse(self.path)
         query = parse_qs(parsed_url.query)
 
@@ -115,7 +115,7 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def run():
-    server = ThreadingHTTPServer(('0.0.0.0', 4444), Handler)
+    server = ThreadingHTTPServer(('0.0.0.0', 4444), Handler) # server dijalankan pada port 4444
     server.serve_forever()
 
 

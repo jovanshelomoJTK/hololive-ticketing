@@ -11,31 +11,29 @@ STAGES_DB = os.path.join(dirname, "db/stages.json")
 TICKETS_DB = os.path.join(dirname, "db/tickets.csv")
 
 
-def get_stages(lockStages: Semaphore):
-    lockStages.acquire()
-    with open(STAGES_DB, "r") as f:
-        stages = json.load(f)
-    lockStages.release()
+def get_stages(lockStages: Semaphore): # def get_stages berfungsi untuk mengambil data stages dari file stages.json, dan lockstage Semaphore digunakan sebagai handle proses read dan write file stages.json
+    with open(STAGES_DB, "r") as f: 
+        stages = json.load(f) 
+    lockStages.release() # berfungsi untuk melepaskan lock pada file stages.json agar bisa diakses oleh proses lain
     return stages
 
 
-def get_my_tickets(username: str, lockTickets: Semaphore):
-    # check username
+def get_my_tickets(username: str, lockTickets: Semaphore): # def get_my_tickets berfungsi untuk mengambil data tiket yang dimiliki oleh user berdasarkan username, dan lockTickets Semaphore digunakan sebagai handle proses read dan write file tickets.csv
     if not username:
         return constants.HANDLER_ERROR_NO_USERNAME
 
     # CSV: ticket_id,stage_id,timestamp,username
     tickets = []
-    lockTickets.acquire()
+    lockTickets.acquire() # berfungsi untuk mengunci file tickets.csv agar tidak bisa diakses oleh proses lain
     with open(TICKETS_DB, "r") as f:
         reader = csv.reader(f, delimiter=",")
         next(reader, None)  # skip the headers
-        try:
+        try: 
             for row in reader:
                 if row[3] == username:
-                    tickets.append(row)
+                    tickets.append(row) 
         except csv.Error:
-            lockTickets.release()
+            lockTickets.release() # berfungsi untuk melepaskan lock pada file tickets.csv agar bisa diakses oleh proses lain
             return constants.HANDLER_ERROR_READ_FILE
     lockTickets.release()
 
@@ -50,7 +48,7 @@ def get_my_tickets(username: str, lockTickets: Semaphore):
     return tickets
 
 
-def buy_ticket(stage_id: int, qty: int, username: str, lockStages: Semaphore, lockTickets: Semaphore):
+def buy_ticket(stage_id: int, qty: int, username: str, lockStages: Semaphore, lockTickets: Semaphore): # def buy_ticket berfungsi untuk membeli tiket berdasarkan stage_id, qty, dan username, dan lockStages dan lockTickets Semaphore digunakan sebagai handle proses read dan write file stages.json dan tickets.csv
     if not username:
         return constants.HANDLER_ERROR_NO_USERNAME
 
@@ -69,7 +67,7 @@ def buy_ticket(stage_id: int, qty: int, username: str, lockStages: Semaphore, lo
     stage_id = int(stage_id)
     qty = int(qty)
 
-    lockStages.acquire()
+    lockStages.acquire() 
     with open(STAGES_DB, "r") as f:
         stages = json.load(f)
 

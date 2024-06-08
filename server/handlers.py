@@ -12,6 +12,7 @@ TICKETS_DB = os.path.join(dirname, "db/tickets.csv")
 
 
 def get_stages(lockStages: Semaphore): # def get_stages berfungsi untuk mengambil data stages dari file stages.json, dan lockstage Semaphore digunakan sebagai handle proses read dan write file stages.json
+    lockStages.acquire() # berfungsi untuk mengunci file stages.json agar tidak bisa diakses oleh proses lain
     with open(STAGES_DB, "r") as f: 
         stages = json.load(f) 
     lockStages.release() # berfungsi untuk melepaskan lock pada file stages.json agar bisa diakses oleh proses lain
